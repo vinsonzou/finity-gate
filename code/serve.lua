@@ -55,7 +55,7 @@ end
 return function()
   local action = route[ngx.var.uri]
   if not action then
-    ngx.log(ngx.ERR, 'bad uri: ', ngx.var.uri)
+    ngx.log(ngx.ERR, 'failed to access uri: ', ngx.var.uri)
     ngx.exit(ngx.HTTP_NOT_FOUND)
   end
   local method, args, err = ngx.req.get_method()
