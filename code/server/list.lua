@@ -16,7 +16,7 @@ return function(args, data, red)
 
   local sql =
   [[
-    SELECT s.id, s.name, s.host, s.port, (CASE WHEN p.playerid IS NULL THEN 0 ELSE 1 END) AS n
+    SELECT s.id, s.name, s.host, s.port, CAST((CASE WHEN p.playerid IS NULL THEN 0 ELSE 1 END) AS SIGNED) AS n
     FROM server AS s LEFT JOIN player AS p ON s.id = p.serverid AND p.userid = %d
     WHERE s.gameid = %d
   ]]
