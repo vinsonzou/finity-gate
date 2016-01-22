@@ -1,9 +1,12 @@
 return
 {
-  ['/gate/user/signup'] = require('user.signup'),
-  ['/gate/user/signin'] = require('user.signin'),
-  ['/gate/user/refresh'] = require('user.refresh'),
-  ['/gate/user/verify'] = require('user.verify'),
+  ['/user/signup'] = require('user.signup'),
+  ['/user/signin'] = require('user.signin'),
+  ['/user/refresh'] = require('user.refresh'),
+  ['/user/verify'] = require('user.verify'),
 
-  ['/gate/server/list'] = require('server.list'),
+  ['/server/list'] = require('server.list'),
+
+  ['/pay/create'] = require('pay.create'),
+  ['/pay/notify'] = require('pay.notify'),
 }

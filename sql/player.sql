@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS player;
 CREATE TABLE player
 (
   userid INT NOT NULL,

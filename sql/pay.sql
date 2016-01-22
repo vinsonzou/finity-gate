@@ -1,8 +1,8 @@
+DROP TABLE IF EXISTS pay;
 CREATE TABLE pay
 (
   id INT NOT NULL AUTO_INCREMENT,
   userid INT NOT NULL,
-  gameid INT NOT NULL,
   serverid INT NOT NULL,
   fee INT NOT NULL, /*order fee in cents*/
   createtime INT NOT NULL, /*order created time in seconds*/
