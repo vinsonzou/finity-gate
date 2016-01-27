@@ -1,10 +1,10 @@
 local throw = require('throw')
 local const = require('const')
+local token = require('sign.self.token')
 
-return function(args, data, red)
-  local sid = args.sid
-
-  local id, err = red:get(const.KEY_SID .. sid)
+return function(tk, red)
+  local tokenkey = const.KEY_TOKEN .. tk
+  local id, err = red:get(tokenkey)
   if not id then
     ngx.log(ngx.ERR, 'failed to call redis get: ', err)
     throw(ngx.HTTP_INTERNAL_SERVER_ERROR)
@@ -12,9 +12,5 @@ return function(args, data, red)
   if id == ngx.null then
     throw(ngx.HTTP_UNAUTHORIZED)
   end
-
-  return
-  {
-    id = tonumber(id)
-  }
+  return token(id, red)
 end

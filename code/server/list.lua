@@ -1,6 +1,7 @@
 local const = require('const')
 local throw = require('throw')
 
+-- FOR CLIENT
 return function(args, data, red)
   local gameid, sid = args.gameid, args.sid
 

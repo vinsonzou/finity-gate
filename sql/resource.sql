@@ -1,0 +1,9 @@
+DROP TABLE IF EXISTS resource;
+CREATE TABLE resource
+(
+  gameid INT NOT NULL,
+  version VARCHAR(16) NOT NULL,
+  url VARCHAR(128) NOT NULL,
+  PRIMARY KEY(gameid, version)
+)
+ENGINE = INNODB DEFAULT CHARACTER SET UTF8;

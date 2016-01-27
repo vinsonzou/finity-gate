@@ -1,7 +1,8 @@
 local quote = ngx.quote_sql_str
 local throw = require('throw')
-local _token = require('user._token')
+local token = require('sign.self.token')
 
+-- FOR CLIENT
 return function(args, data, red)
   local name, pass = args.name, args.pass
 
@@ -12,9 +13,11 @@ return function(args, data, red)
   end
 
   local md5 = ngx.md5(pass)
-  sql = 'INSERT INTO user(name, pass) VALUES(%s, %s)'
-  local id = data.insert(sql, quote(name), quote(md5))
-
-  -- generate token & sid too
-  return _token(id, red)
+  sql = 'INSERT INTO user(name, pass, platform) VALUES(%s, %s, %s)'
+  local id = data.insert(sql, quote(name), quote(md5), quote('self'))
+  local ret = token(id, red)
+  return
+  {
+    sid = ret.sid
+  }
 end

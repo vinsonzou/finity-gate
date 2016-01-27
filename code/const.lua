@@ -8,4 +8,5 @@ return
 
   KEY_SID = 'sid/', -- current sid, pattern: sid/{SID}, expired in 1 day
   KEY_TOKEN = 'token/', -- refresh token, pattern: token/{token}, expired in 14 days
+  KEY_USER = 'user/', -- user hash
 }

@@ -8,7 +8,8 @@ CREATE TABLE pay
   createtime INT NOT NULL, /*order created time in seconds*/
   extra VARCHAR(128), /*extra description for this order*/
 
-  notifyid VARCHAR(32), /*3rd-party order serial number*/
+  platform VARCHAR(16) NOT NULL, /*3rd-party platform name*/
+  orderid VARCHAR(32) NOT NULL, /*3rd-party order serial number*/
   notifyfee INT, /*3rd-party fee really payed*/
   notfiytime INT, /*3rd-party notify time in seconds*/
   PRIMARY KEY(id)

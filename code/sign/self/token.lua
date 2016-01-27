@@ -1,12 +1,14 @@
 local const = require('const')
 local throw = require('throw')
 
+-- INTERNAL CALL
+-- TODO bug: old token and sid still valid
 return function(id, red)
   local now = ngx.now()
   local token, sid = ngx.md5(id .. now .. const.SECRET_TOKEN), ngx.md5(id .. now .. const.SECRET_SID)
-  local tokenkey, sidkey = const.KEY_TOKEN .. token, const.KEY_SID .. sid
+  local tokenkey, sidkey, userkey = const.KEY_TOKEN .. 'self@' .. token, const.KEY_SID .. 'self@' .. sid, const.KEY_USER .. id
 
-  red:watch(tokenkey, sidkey)
+  red:watch(tokenkey, sidkey, userkey)
   local ok, err = red:multi()
   if not ok then
     ngx.log(ngx.ERR, 'failed to call redis multi: ', err)
@@ -20,6 +22,11 @@ return function(id, red)
   local ok, err = red:setex(sidkey, const.EXPIRE_SID, id)
   if not ok then
     ngx.log(ngx.ERR, 'failed to call redis setex: ', err)
+    throw(ngx.HTTP_INTERNAL_SERVER_ERROR)
+  end
+  local ok, err = red:hmset(userkey, 'token', token, 'sid', sid)
+  if not ok then
+    ngx.log(ngx.ERR, 'failed to call hmset: ', err)
     throw(ngx.HTTP_INTERNAL_SERVER_ERROR)
   end
   local ok, err = red:exec()
