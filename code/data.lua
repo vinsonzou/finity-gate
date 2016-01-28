@@ -73,14 +73,22 @@ return function(db)
       throw(ngx.HTTP_INTERNAL_SERVER_ERROR)
     end
     for _, v in ipairs(ps) do
-      local us = {}
+      local sets, us = {}, {}
       for i, vv in ipairs(v) do
-        ret, err, errno, sqlstate = M.db:query('SET @p' .. i .. ' = ' .. vv)
+        sets[#sets + 1] = 'SET @p' .. i .. ' = ' .. vv .. ';'
+        us[#us + 1] = '@p' .. i
+      end
+      ret, err, errno, sqlstate = M.db:query(table.concat(sets, ''))
+      if not ret then
+        ngx.log(ngx.ERR, 'failed to mysql set: ', err)
+        throw(ngx.HTTP_INTERNAL_SERVER_ERROR)
+      end
+      while err == 'again' do
+        ret, err, errno, sqlstate = M.db:read_result()
         if not ret then
           ngx.log(ngx.ERR, 'failed to mysql set: ', err)
           throw(ngx.HTTP_INTERNAL_SERVER_ERROR)
         end
-        us[#us + 1] = '@p' .. i
       end
       ret, err, errno, sqlstate = M.db:query('EXECUTE data_updates USING ' .. table.concat(us, ','))
       if not ret then
@@ -112,14 +120,22 @@ return function(db)
       throw(ngx.HTTP_INTERNAL_SERVER_ERROR)
     end
     for _, v in ipairs(ps) do
-      local us = {}
+      local sets, us = {}, {}
       for i, vv in ipairs(v) do
-        ret, err, errno, sqlstate = M.db:query('SET @p' .. i .. ' = ' .. vv)
+        sets[#sets + 1] = 'SET @p' .. i .. ' = ' .. vv .. ';'
+        us[#us + 1] = '@p' .. i
+      end
+      ret, err, errno, sqlstate = M.db:query(table.concat(sets, ''))
+      if not ret then
+        ngx.log(ngx.ERR, 'failed to mysql set: ', err)
+        throw(ngx.HTTP_INTERNAL_SERVER_ERROR)
+      end
+      while err == 'again' do
+        ret, err, errno, sqlstate = M.db:read_result()
         if not ret then
           ngx.log(ngx.ERR, 'failed to mysql set: ', err)
           throw(ngx.HTTP_INTERNAL_SERVER_ERROR)
         end
-        us[#us + 1] = '@p' .. i
       end
       ret, err, errno, sqlstate = M.db:query('EXECUTE data_inserts USING ' .. table.concat(us, ','))
       if not ret then
