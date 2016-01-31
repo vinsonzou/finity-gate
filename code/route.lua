@@ -5,8 +5,8 @@ return
 
   ['/c/sign/signup'] = require('sign.signup'),
   ['/c/sign/signin'] = require('sign.signin'),
-  ['/s/sign/refresh'] = require('sign.verify'),
-  ['/s/sign/verify'] = require('sign.refresh'),
+  ['/s/sign/verify'] = require('sign.verify'),
+  ['/s/sign/refresh'] = require('sign.refresh'),
 
   ['/c/pay/create'] = require('pay.create'),
   ['/p/pay/notify/alipay'] = require('pay.alipay.notify'),

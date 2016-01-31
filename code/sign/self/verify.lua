@@ -18,12 +18,13 @@ return function(sid, red)
     throw(ngx.HTTP_INTERNAL_SERVER_ERROR)
   end
   local userkey = const.KEY_USER .. id
-  local user, err = red:hmget(userkey)
+  local user, err = red:hmget(userkey, 'token')
   if not user then
     ngx.log(ngx.ERR, 'failed to call redis hmget: ', err)
     throw(ngx.HTTP_INTERNAL_SERVER_ERROR)
   end
-  local tokenkey = const.KEY_TOKEN .. user.token
+  
+  local tokenkey = const.KEY_TOKEN .. user[1]
   local tokenexpire = red:ttl(tokenkey)
   if not tokenexpire then
     ngx.log(ngx.ERR, 'failed to call redis ttl: ', err)

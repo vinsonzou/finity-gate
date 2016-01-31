@@ -84,6 +84,7 @@ return function()
   after(my, red, commit)
 
   if not commit then
+    ngx.log(ngx.ERR, resp)
     local idx = string.find(resp, '{', 1, true)
     if idx then
       resp = loadstring('return ' .. string.sub(resp, idx))()
@@ -93,5 +94,7 @@ return function()
     ngx.log(ngx.ERR, 'failed to call action: ', ngx.var.uri, ', errcode: ', resp.err)
     ngx.exit(resp.err)
   end
-  ngx.say(resp and cjson.encode(resp) or '{}')
+
+  local o = resp and cjson.encode(resp) or '{}'
+  ngx.say(args.callback and args.callback .. '(' .. o .. ');' or o)
 end

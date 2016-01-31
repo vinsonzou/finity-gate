@@ -1,6 +1,6 @@
 local quote = ngx.quote_sql_str
 local throw = require('throw')
-local verify = require('user.verify')
+local verify = require('sign.verify')
 
 local platforms =
 {

@@ -17,7 +17,8 @@ return function(args, data, red)
   if not idx then
     throw(ngx.HTTP_ILLEGAL)
   end
-  local platform = loadstring('return ' .. string.sub(sid, 1, idx))()
+  
+  local platform = string.sub(sid, 1, idx - 1)
   if not platforms[platform] then
     throw(ngx.HTTP_ILLEGAL)
   end

@@ -4,7 +4,7 @@ local token = require('sign.self.token')
 
 -- FOR CLIENT
 return function(args, data, red)
-  local name, pass = args.sid, args.name, args.pass
+  local name, pass = args.name, args.pass
 
   local md5 = ngx.md5(pass)
   local sql = 'SELECT id FROM user WHERE name = %s AND pass = %s'

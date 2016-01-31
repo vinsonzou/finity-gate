@@ -5,8 +5,8 @@ local throw = require('throw')
 -- TODO bug: old token and sid still valid
 return function(id, red)
   local now = ngx.now()
-  local token, sid = ngx.md5(id .. now .. const.SECRET_TOKEN), ngx.md5(id .. now .. const.SECRET_SID)
-  local tokenkey, sidkey, userkey = const.KEY_TOKEN .. 'self@' .. token, const.KEY_SID .. 'self@' .. sid, const.KEY_USER .. id
+  local token, sid = 'self@' .. ngx.md5(id .. now .. const.SECRET_TOKEN), 'self@' .. ngx.md5(id .. now .. const.SECRET_SID)
+  local tokenkey, sidkey, userkey = const.KEY_TOKEN .. token, const.KEY_SID .. sid, const.KEY_USER .. id
 
   red:watch(tokenkey, sidkey, userkey)
   local ok, err = red:multi()
