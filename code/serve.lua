@@ -10,32 +10,36 @@ local function before()
   local my, err = mysql:new()
   if not my then
     ngx.log(ngx.ERR, 'failed to new mysql: ', err)
-    return false
+    return
   end
   my:set_timeout(config.mysql.timeout)
   local ret, err, errno, sqlstate = my:connect(config.mysql.datasource)
   if not ret then
     ngx.log(ngx.ERR, 'failed to connect to mysql: ', err)
-    return false
+    return
   end
   local ret, err, errno, sqlstate = my:query('START TRANSACTION')
   if not ret then
+    my:close()
     ngx.log(ngx.ERR, 'failed to start mysql transaction: ', err)
-    return false
+    return
   end
 
   local red, err = redis:new()
   if not red then
     ngx.log(ngx.ERR, 'failed to new redis: ', err)
-    return false
+    my:close()
+    return
   end
   red:set_timeout(config.redis.timeout)
   local ok, err = red:connect(config.redis.host)
   if not ok then
     ngx.log(ngx.ERR, 'failed to connect to redis: ', err)
-    return false
+    red:close()
+    my:close()
+    return
   end
-  return true, my, red
+  return my, red
 end
 
 local function after(my, red, commit)
@@ -72,9 +76,8 @@ return function()
     ngx.exit(ngx.HTTP_METHOD_NOT_IMPLEMENTED)
   end
 
-  local ok, my, red = before()
-  if not ok then
-    after(my, red, false)
+  local my, red = before()
+  if not my then
     ngx.exit(ngx.HTTP_INTERNAL_SERVER_ERROR)
   end
 
