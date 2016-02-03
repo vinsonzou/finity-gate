@@ -2,7 +2,6 @@ return
 {
   debug = true,
 
-  -- mysql config
   mysql =
   {
     timeout = 1000,
@@ -18,7 +17,6 @@ return
     }
   },
 
-  -- redis config
   redis =
   {
     timeout = 1000,
