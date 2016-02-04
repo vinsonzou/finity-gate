@@ -5,11 +5,14 @@
 JSON/JSONP数据格式
 </pre>
 
+<<<<<<< HEAD
 # 部署
 <pre>
 需要根据环境更改nginx.conf和config.lua
 </pre>
 
+=======
+>>>>>>> 5f4500d0a36786c00d4c9689505e3aaf66d627c6
 ## 一. 客户端相关接口
 
 ### 游戏包更新检测
